@@ -5,7 +5,7 @@ from som import SelfMap
 from sklearn.preprocessing import MinMaxScaler
 
 #Data Preprocessing
-dataset = pd.read_csv('./credit_card_applications.csv')
+dataset = pd.read_csv('credit_card_applications.csv')
 X = dataset.iloc[:, :-1].values
 y = dataset.iloc[:, -1].values
 sc = MinMaxScaler(feature_range = (0, 1))
@@ -35,7 +35,7 @@ for i in range(weights.shape[0]):
         wy = yy[(i, j)]*2/np.sqrt(3)*3/4
         
         hex = RegularPolygon((xx[(i, j)], wy), numVertices=6, radius=.95/np.sqrt(3),
-                      facecolor=cm.Blues(umatrix[i, j]), alpha=.4, edgecolor='gray')
+                      facecolor=cm.Greys(umatrix[i, j]), alpha=.4, edgecolor='gray')
         ax.add_patch(hex)
 
 markers = ['o', 'x']
@@ -55,7 +55,7 @@ plt.yticks(yrange*2/np.sqrt(3)*3/4, yrange)
 
 divider = make_axes_locatable(plt.gca())
 ax_cb = divider.new_horizontal(size="5%", pad=0.05)    
-cb1 = colorbar.ColorbarBase(ax_cb, cmap=cm.Blues, 
+cb1 = colorbar.ColorbarBase(ax_cb, cmap=cm.Greys, 
                             orientation='vertical', alpha=.4)
 cb1.ax.get_yaxis().labelpad = 16
 cb1.ax.set_ylabel('distance from neurons in the neighbourhood',
@@ -73,6 +73,6 @@ plt.savefig('resulting_image.png')
 plt.show()
 
 #Finding the frauds
-# mappings = som.win_map(X)
+#mappings = som.win_map(X)
 # frauds = np.concatenate((mappings[(2,6)], mappings[(2,4)]), axis = 0)
 # frauds = sc.inverse_transform(frauds)
