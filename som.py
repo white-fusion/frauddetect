@@ -38,16 +38,8 @@ def asymptotic_decay(learning_rate, t, max_iter):
 
 
 class SelfMap(object):
-    def __init__(self, x, y, input_len, sigma=1.0, learning_rate=0.5,
-                 decay_function=asymptotic_decay,
-                 neighborhood_function='gaussian', topology='rectangular',
-                 activation_distance='euclidean', random_seed=None):
+    def __init__(self, x, y, input_len, sigma=1.0, learning_rate=0.5):
         """Initializes a Self Organizing Maps.
-        A rule of thumb to set the size of the grid for a dimensionality
-        reduction task is that it should contain 5*sqrt(N) neurons
-        where N is the number of samples in the dataset to analyze.
-        E.g. if your dataset has 150 samples, 5*sqrt(150) = 61.23
-        hence a map 8-by-8 should perform well.
         Parameters
         ----------
         x : int
@@ -65,29 +57,8 @@ class SelfMap(object):
             (at the iteration t we have
             learning_rate(t) = learning_rate / (1 + t/T)
             where T is #num_iteration/2)
-        decay_function : function (default=None)
-            Function that reduces learning_rate and sigma at each iteration
-            the default function is:
-                        learning_rate / (1+t/(max_iterarations/2))
-            A custom decay function will need to to take in input
-            three parameters in the following order:
-            1. learning rate
-            2. current iteration
-            3. maximum number of iterations allowed
-            Note that if a lambda function is used to define the decay
-            MiniSom will not be pickable anymore.
-        neighborhood_function : string, optional (default='gaussian')
-            Function that weights the neighborhood of a position in the map.
-            Possible values: 'gaussian'
-        topology : string, optional (default='rectangular')
-            Topology of the map.
-            Possible values: 'rectangular', 'hexagonal'
-        activation_distance : string, optional (default='euclidean')
-            Distance used to activate the map.
-            Possible values: 'euclidean'
-        random_seed : int, optional (default=None)
-            Random seed to use.
         """
+        random_seed=None
         self._random_generator = random.RandomState(random_seed)
         self._learning_rate = learning_rate
         self._sigma = sigma
@@ -98,16 +69,14 @@ class SelfMap(object):
         self._activation_map = zeros((x, y))
         self._neigx = arange(x)
         self._neigy = arange(y)  # used to evaluate the neighborhood function
-        self.topology = topology
+        self.topology = 'hexagonal'
         self._xx, self._yy = meshgrid(self._neigx, self._neigy)
         self._xx = self._xx.astype(float)
         self._yy = self._yy.astype(float)
         self._xx[::-2] -= 0.5    
-        self._decay_function = decay_function
-        neig_functions = {'gaussian': self._gaussian}
-        self.neighborhood = neig_functions[neighborhood_function]
-        distance_functions = {'euclidean': self._euclidean_distance}
-        self._activation_distance = distance_functions[activation_distance]
+        self._decay_function = asymptotic_decay
+        self.neighborhood = self._gaussian
+        self._activation_distance = self._euclidean_distance
 
     def get_weights(self):
         """Returns the weights of the neural network."""
@@ -118,14 +87,12 @@ class SelfMap(object):
         plane that reflects the chosen topology in two meshgrids xx and yy.
         Neuron with map coordinates (1, 4) has coordinate (xx[1, 4], yy[1, 4])
         in the euclidean plane.
-        Only useful if the topology chosen is not rectangular.
         """
         return self._xx.T, self._yy.T
 
     def convert_map_to_euclidean(self, xy):
         """Converts map coordinates into euclidean coordinates
-        that reflects the chosen topology.
-        Only useful if the topology chosen is not rectangular.
+        that reflects the hexagonal topology
         """
         return self._xx.T[xy], self._yy.T[xy]
 
@@ -173,7 +140,7 @@ class SelfMap(object):
         sig = self._decay_function(self._sigma, t, max_iteration)
         # improves the performances
         g = self.neighborhood(win, sig)*eta
-        # w_new = eta * neighborhood_function * (x-w)
+        # w_new = eta * 'gaussian' * (x-w)
         self._weights += einsum('ij, ijk->ijk', g, x-self._weights)
 
     def random_weights_init(self, data):
@@ -208,8 +175,8 @@ class SelfMap(object):
                     self._weights.shape[1],
                     8))  # 2 spots more for hexagonal topology
 
-        ii = [[0, -1, -1, -1, 0, 1, 1, 1]]*2
-        jj = [[-1, -1, 0, 1, 1, 1, 0, -1]]*2
+        #ii = [[0, -1, -1, -1, 0, 1, 1, 1]]*2
+        #jj = [[-1, -1, 0, 1, 1, 1, 0, -1]]*2
 
         if self.topology == 'hexagonal':
             ii = [[1, 1, 1, 0, -1, 0], [0, 1, 0, -1, -1, -1]]
@@ -218,7 +185,7 @@ class SelfMap(object):
         for x in range(self._weights.shape[0]):
             for y in range(self._weights.shape[1]):
                 w_2 = self._weights[x, y]
-                e = y % 2 == 0   # only used on hexagonal topology
+                e = y % 2 == 0   
                 for k, (i, j) in enumerate(zip(ii[e], jj[e])):
                     if (x+i >= 0 and x+i < self._weights.shape[0] and
                             y+j >= 0 and y+j < self._weights.shape[1]):

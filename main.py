@@ -12,8 +12,7 @@ sc = MinMaxScaler(feature_range = (0, 1))
 X = sc.fit_transform(X)
 
 # Initialization and training
-som = SelfMap(x = 12,y = 12, input_len = 15, sigma=1.0, learning_rate= 0.5, activation_distance='euclidean',
-              topology='hexagonal', neighborhood_function='gaussian')
+som = SelfMap(x = 12,y = 12, input_len = 15, sigma=1.0, learning_rate= 0.5)
 som.random_weights_init(X)
 som.train(data = X, num_iteration = 1000)
 
