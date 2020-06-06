@@ -38,7 +38,7 @@ for i in range(weights.shape[0]):
                       facecolor=cm.Greys(umatrix[i, j]), alpha=.4, edgecolor='gray')
         ax.add_patch(hex)
 
-markers = ['o', 'x']
+markers = ['o', 's']
 colors = ['r', 'g']
 for cnt, x in enumerate(X):
     w = som.winner(x)  # getting the winner
@@ -62,9 +62,9 @@ cb1.ax.set_ylabel('distance from neurons in the neighbourhood',
                   rotation=270, fontsize=16)
 plt.gcf().add_axes(ax_cb)
 
-legend_elements = [Line2D([0], [0], marker='o', color='r', label='fraudulent',
+legend_elements = [Line2D([0], [0], marker='o', color='r', label='approved',
                    markerfacecolor='w', markersize=14, linestyle='None', markeredgewidth=2),
-                   Line2D([0], [0], marker='x', color='g', label='non-fraudulent',
+                   Line2D([0], [0], marker='s', color='g', label='non-approved',
                    markerfacecolor='w', markersize=14, linestyle='None', markeredgewidth=2)]
 ax.legend(handles=legend_elements, bbox_to_anchor=(0.1, 1.08), loc='upper left', 
           borderaxespad=0., ncol=2, fontsize=14)

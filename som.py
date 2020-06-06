@@ -19,7 +19,6 @@ def _build_iteration_indexes(data_len, num_iterations, random_generator=None):
 
 def fast_norm(x):
     """Returns norm-2 of a 1-D numpy array.
-    * faster than linalg.norm in case of 1-D arrays (numpy 1.9.2rc1).
     """
     return sqrt(dot(x, x.T))
 
@@ -39,7 +38,7 @@ def asymptotic_decay(learning_rate, t, max_iter):
 
 class SelfMap(object):
     def __init__(self, x, y, input_len, sigma=1.0, learning_rate=0.5):
-        """Initializes a Self Organizing Maps.
+        """Initializes a Self Organizing Map.
         Parameters
         ----------
         x : int
