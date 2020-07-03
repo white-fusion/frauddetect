@@ -8,3 +8,5 @@ When SOM is applied, it forms different clusters and outliers(i.e. whose distanc
 
 With the help of last feature, we can make a list of all people who are potential frauds and also got an approval, and investigate further.
 <img src="resulting_image.png">
+
+Check [here](http://www.ai-junkie.com/ann/som/) to know more about SOM implementation.
