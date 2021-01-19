@@ -1,3 +1,9 @@
+Team Members:
+Yaswanth Kumar Rayapati
+Harsha Vardhan
+Sriram Ranga
+
+Project Details:
 The dataset used here is [Australian Credit Approval Dataset](https://archive.ics.uci.edu/ml/datasets/Statlog+(Australian+Credit+Approval)).
 
 The last feature, which we don't consider for SOM, contains the information whether or not the credit has been approved.
