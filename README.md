@@ -1,9 +1,9 @@
 Team Members:
-<li>
-  <ul>Yaswanth Kumar Rayapati</ul>
-  <ul>Harsha Vardhan Sigireddy</ul>
-  <ul>Sriram Ranga</ul>
-</li>
+<ul>
+  <li>Yaswanth Kumar Rayapati</li>
+  <li>Harsha Vardhan Sigireddy</li>
+  <li>Sriram Ranga</li>
+</ul>
 
 Project Details:
 
